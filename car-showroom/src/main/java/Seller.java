@@ -24,7 +24,7 @@ public class Seller {
         try {
             System.out.println("Поставщик пригнал новую машину");
             Thread.sleep(3000);
-            shop.showStock().add(Car.newRandomCar());
+//            shop.obtainACar();
             System.out.println("Новая машина получена в салон");
             notify();
         } catch (InterruptedException e) {
