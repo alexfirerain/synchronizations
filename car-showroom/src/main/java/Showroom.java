@@ -16,7 +16,7 @@ public class Showroom {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                break; // если return, то покупателя закроют в салоне на ночь.
+                break;
             }
         }
         try {
