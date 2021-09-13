@@ -32,7 +32,7 @@ public class Main {
         }
         dealer.interrupt();
         buyers.interrupt();
-        System.out.println(Showroom.SALES_PLAN + " машин продано. Всем спасибо, все свободны!");
+        System.out.println("План продажи " + Showroom.SALES_PLAN + " машин выполнен. Всем спасибо, все свободны!");
     }
 
     public static void randomDelay(int avg) throws InterruptedException {

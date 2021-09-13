@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 
 public class Showroom {
@@ -10,19 +11,26 @@ public class Showroom {
 
     public synchronized void sellACar(Customer buyer) {
         while (stock.isEmpty()) {
-            System.out.println("Нет ни машины в наличии");
+            System.out.println("Нет машин в наличии! " + buyer.getName() + " потусуется немного в холле.\n");
             try {
                 wait();
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break; // если return, то покупателя закроют в салоне на ночь.
+            }
         }
-        Car sold = stock.remove();
-        carsSold++;
-        System.out.println(buyer.getName() + " приобрёл машину " + sold);
+        try {
+            Car sold = stock.remove();
+            carsSold++;
+            System.out.println(buyer.getName() + " приобрёл машину " + sold + " и поехал кататься.\n" );
+        } catch (NoSuchElementException e) {
+            System.out.println("Салон закрылся. " + buyer.getName() + " придёт завтра.");
+        }
     }
 
     public synchronized void obtainACar(Car car) {
         stock.add(car);
-        System.out.println("Получена новая машина " + car);
+        System.out.println("От поставщика получена новая машина " + car);
         notify();
     }
 

@@ -14,11 +14,12 @@ public class Dealer implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
+        while (!interrupted()) {
             try {
                 Thread.sleep(RELEASE_PERIOD);
                 provideACar(partner);
-            } catch (InterruptedException ignored) {
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 break;
             }
         }
