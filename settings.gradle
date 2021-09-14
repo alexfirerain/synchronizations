@@ -1,4 +1,5 @@
 rootProject.name = 'synchronizations'
 include 'car-showroom'
 include 'car-dealership'
+include 'restaurant'
 

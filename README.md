@@ -4,7 +4,7 @@
 * ### [Car-Showroom](./car-showroom/src/main/java)
 Простая реализация автосалона без соблюдения очереди.
 
-[comment]: <> (* ### [Car-Dealership]&#40;./car-dealership/src/main/java/&#41;)
+* ### [Car-Dealership](./car-dealership/src/main/java)
 
 [comment]: <> (Реализация автосалона с использованием замочных синхронизаторов.)
 

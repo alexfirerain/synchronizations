@@ -1,6 +1,6 @@
 public class Main {
-    private static final String[] customers = {"Покупатель А", "Покупатель Б", "Покупатель В", "Покупатель Г" };
-    private static final int PLAN_CHEK_PERIOD = 1000;
+    private static final String[] customers = { "Покупатель А", "Покупатель Б", "Покупатель В", "Покупатель Г" };
+    private static final int PLAN_CHECK_PERIOD = 1000;
     private static final int CUSTOMERS_ENTRANCE_DELAY = 700;
 
     public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class Main {
         // проверка выполнения плана
         while (!showroom.planFulfilled()) {
             try {
-                Thread.sleep(PLAN_CHEK_PERIOD);
+                Thread.sleep(PLAN_CHECK_PERIOD);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
