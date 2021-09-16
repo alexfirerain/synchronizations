@@ -3,23 +3,22 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class Lunchroom {
-    static final int SALES_PLAN = 5;             // сколько надо посетителей для плана
+    static final int SALES_PLAN = 5;              // сколько надо посетителей для плана
 
-    final private String name;                   // название заведения
-    final private Cook cook;                     // штатный повар
-    final private List<Waiter> waiters;          // штат официантов
-    private List<Customer> customers;            // посетители в заведении
+    final private String name;                    // название заведения
+    final Cook cook;                              // штатный повар
+    final List<Waiter> waiters;                   // штат официантов
+    private List<Customer> customers;             // посетители в заведении
 
-    private int customersCome;                   // сколько посетителей зашло
+    private int customersCome;                    // сколько посетителей зашло
 
-    private boolean isOpen = true;              // работает ли заведение
+    private boolean isOpen = true;                // работает ли заведение
 
     public Lunchroom(String name, int numberOfWaiters) {
         this.name = name;
         cook = new Cook(this);
         waiters = new ArrayList<>(numberOfWaiters);
-        IntStream.range(0, numberOfWaiters)
-                .forEach(i -> waiters.add(new Waiter(this)));
+        IntStream.range(0, numberOfWaiters).forEach(i -> waiters.add(new Waiter(this)));
         welcome();
     }
 
