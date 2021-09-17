@@ -25,6 +25,8 @@ public class Customer implements Runnable {
     }
     @Override
     public void run() {
+        if (!lunchroom.isOpenForEntrance()) return;
+
         lunchroom.haveCustomerCome(this);
         // некоторое время изучать меню
         Main.timePass(MEAN_CHOOSING_TIME);
@@ -55,20 +57,23 @@ public class Customer implements Runnable {
     private void makeAnOrder(Lunchroom lunchroom) {
         // позовём официанта
         boolean calling = true;
-        while(calling) {
+        while (calling) {
             // периодически зовём официанта
             Main.timePass(CALLING_TIME);
             for (Waiter w : lunchroom.waiters) {
                 // если официант отозвался, делаем заказ
                 if (w.isFree()) {
+                    w.serving.lock();
                     try {
                         w.orderToServe.signal();
                         w.serveTheCustomer(this);
+                        // и больше звать официанта не надо
+                        calling = false;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    } finally {
+                        w.serving.unlock();
                     }
-                    // и больше звать официанта не надо
-                    calling = false;
                 }
             }
         }

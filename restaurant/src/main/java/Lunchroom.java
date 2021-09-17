@@ -17,6 +17,7 @@ public class Lunchroom {
     public Lunchroom(String name, int numberOfWaiters) {
         this.name = name;
         cook = new Cook(this);
+        customers = new ArrayList<>(SALES_PLAN);
         waiters = new ArrayList<>(numberOfWaiters);
         IntStream.range(0, numberOfWaiters).forEach(i -> waiters.add(new Waiter(this)));
         welcome();

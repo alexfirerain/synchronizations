@@ -35,7 +35,7 @@ public class Waiter implements Runnable {
                 // здесь
 
                 // возврат к началу;
-                isFree = true;
+
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -45,16 +45,22 @@ public class Waiter implements Runnable {
     }
 
     public void serveTheCustomer(Customer client) throws InterruptedException {
-//        takeTheClient(client);
         System.out.println(this + " принял заказ от " + client);
         isFree = false;
-        // передать заказ повару (он ставит его в очередь ?) // нет, для упрощения просто ждёт, пока тот освободится
-        company.cook.orderToCook.signal();
-        // ждать, пока повар сготовит блюдо // по-хорошему, нужно было бы обслуживать новых посетителей
-        company.cook.dish.await();
-        // отнести блюдо посетителю
-        System.out.println(this + " отнёс заказ для " + client);
-        client.dishReady.signal();
+        try {
+            company.cook.cooking.lock();
+            // передать заказ повару (он ставит его в очередь ?) // нет, для упрощения просто ждёт, пока тот освободится
+            company.cook.orderToCook.signal();
+            // ждать, пока повар сготовит блюдо // по-хорошему, нужно было бы обслуживать новых посетителей
+            company.cook.cookFor(client);
+            company.cook.dish.await();
+            // отнести блюдо посетителю
+             System.out.println(this + " отнёс заказ для " + client);
+             client.dishReady.signal();
+        } finally {
+            company.cook.cooking.unlock();
+        }
+        isFree = true;
     }
 
     public boolean isFree() {
