@@ -9,9 +9,11 @@ public class Showroom {
     public static final int SALES_PLAN = 10;
 
     private final Queue<Car> stock = new LinkedList<>();
-    final Dealer supplier = new Dealer(this);
+    protected final Dealer supplier = new Dealer(this);
+
     Lock sync = new ReentrantLock();
     Condition carReceived = sync.newCondition();
+
     private int carsSold;
 
     public void sellACar(Customer buyer) {

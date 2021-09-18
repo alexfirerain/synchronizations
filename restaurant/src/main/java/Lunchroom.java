@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 public class Lunchroom {
@@ -7,8 +9,8 @@ public class Lunchroom {
 
     final private String name;                    // название заведения
     final Cook cook;                              // штатный повар
-    final List<Waiter> waiters;                   // штат официантов
-    private List<Customer> customers;             // посетители в заведении
+    final Set<Waiter> waiters;                   // штат официантов
+    private Set<Customer> customers;             // посетители в заведении
 
     private int customersCome;                    // сколько посетителей зашло
 
@@ -17,8 +19,8 @@ public class Lunchroom {
     public Lunchroom(String name, int numberOfWaiters) {
         this.name = name;
         cook = new Cook(this);
-        customers = new ArrayList<>(SALES_PLAN);
-        waiters = new ArrayList<>(numberOfWaiters);
+        customers = new HashSet<>(SALES_PLAN);
+        waiters = new HashSet<>(numberOfWaiters);
         IntStream.range(0, numberOfWaiters).forEach(i -> waiters.add(new Waiter(this)));
         welcome();
     }
@@ -45,9 +47,9 @@ public class Lunchroom {
     public void haveCustomerServed(Customer customer) {
         System.out.println(customer + " благодарит за трапезу и откланивается");
         customers.remove(customer);
-        if (!isOpenForEntrance() && customers.isEmpty()) {
-            isOpen = false;
+        if (customers.isEmpty() && !isOpenForEntrance()) {
             farewell();
+            isOpen = false;
         }
     }
 

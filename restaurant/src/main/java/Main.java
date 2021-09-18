@@ -11,19 +11,24 @@ public class Main {
         persons.execute(restaurant.cook);
         restaurant.waiters.forEach(persons::execute);
 
-        // запуск посетителей
-        while(restaurant.isOpenForEntrance()) {
-            timePass(CUSTOMERS_ENTRANCE_DELAY);
-            persons.execute(new Customer(restaurant));
+        while (restaurant.isOpen()) {
+            // запуск посетителей
+            while(restaurant.isOpenForEntrance()) {
+                timePass(CUSTOMERS_ENTRANCE_DELAY);
+                persons.execute(new Customer(restaurant));
+            }
         }
 
-        persons.shutdownNow();
+        persons.shutdown();
     }
+
 
     public static void timePass(int avg) {
         try {
-            Thread.sleep((long) (avg * (Math.random() + 0.5)));
+            Thread.sleep((long) ((Math.random() + 0.5) * avg));
         } catch (InterruptedException e) {
+            System.out.println("Нежданное прерывание в "
+                    + Thread.currentThread().getStackTrace()[1].getClassName());
             e.printStackTrace();
         }
     }
