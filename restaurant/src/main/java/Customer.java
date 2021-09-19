@@ -8,26 +8,20 @@ public class Customer implements Runnable {
     private final Lunchroom lunchroom;      // столовая, в которой ест
     private final int id;                   // номер посетителя в мире столовой
 
-//    Lock waiting = new ReentrantLock();
-//    Condition dishReady = waiting.newCondition();
-
     public Customer(Lunchroom lunchroom) {
         this.lunchroom = lunchroom;
         id = ++N;
     }
+
     @Override
     public void run() {
         if (!lunchroom.isOpenForEntrance()) return;
-
         lunchroom.haveCustomerCome(this);
-        // некоторое время изучать меню
         Main.timePass(MEAN_CHOOSING_TIME);
-        // сделать заказ и ждать получения блюда
         makeAnOrder(lunchroom);
-        // получить блюдо и некоторое время кушать
         consume();
-        // закончив, попрощаться и уйти
         lunchroom.haveCustomerServed(this);
+//        Thread.currentThread().interrupt();
     }
 
     private void makeAnOrder(Lunchroom lunchroom) {

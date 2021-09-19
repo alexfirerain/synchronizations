@@ -5,11 +5,12 @@ import java.util.concurrent.locks.ReentrantLock;
 import static java.lang.Thread.interrupted;
 
 public class Waiter implements Runnable {
-    static private int N;               // количество официантов в игровом мире
+    static private int N;                         // количество официантов в игровом мире
 
-    private final Lunchroom company;    // организация где работает
-    private final int id;               // номер официанта в организации
-    private Customer client;            // обслуживаемый посетитель
+    private final Lunchroom company;             // организация где работает
+    private final int id;                        // номер официанта в организации
+
+    private Customer client;                     // обслуживаемый посетитель
     private volatile boolean isFree = true;      // флажок доступности официанта
 
     Lock serving = new ReentrantLock();
@@ -27,11 +28,8 @@ public class Waiter implements Runnable {
         while (company.isOpen() && !interrupted()) {
             try {
                 serving.lock();
-                // блокироваться и ожидать заказа посетителя
                 orderToServe.await();
-                // здесь
                 serveTheCustomer(client);
-                // возврат к началу;
                 dishReady.signal();
             }
             catch (InterruptedException e) { e.printStackTrace(); }
@@ -44,18 +42,12 @@ public class Waiter implements Runnable {
         System.out.println(this + " принял заказ от " + client);
         try {
             company.cook.cooking.lock();
-            // передать заказ повару (он ставит его в очередь ?) // нет, для упрощения просто ждёт, пока тот освободится
-//            company.cook.orderToCook.signal();
-            // ждать, пока повар сготовит блюдо // по-хорошему, нужно было бы обслуживать новых посетителей
             company.cook.cookFor(client);
-//            company.cook.dishCooked.await();
-            // отнести блюдо посетителю
-             System.out.println(this + " несёт заказ для " + client);
+            System.out.println(this + " несёт заказ для " + client);
         } finally {
             company.cook.cooking.unlock();
             isFree = true;
         }
-
     }
 
     public boolean isFree() {

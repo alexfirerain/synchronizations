@@ -1,20 +1,18 @@
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
 public class Lunchroom {
-    static final int SALES_PLAN = 5;              // сколько надо посетителей для плана
+    static final int SALES_PLAN = 5;             // сколько надо посетителей для плана
 
-    final private String name;                    // название заведения
-    final Cook cook;                              // штатный повар
+    final private String name;                   // название заведения
+    final Cook cook;                             // штатный повар
     final Set<Waiter> waiters;                   // штат официантов
-    private Set<Customer> customers;             // посетители в заведении
+    private final Set<Customer> customers;       // посетители в заведении
 
-    private int customersCome;                    // сколько посетителей зашло
+    private int customersCome;                   // сколько посетителей зашло
 
-    private boolean isOpen = true;                // работает ли заведение
+    private boolean isOpen = true;               // работает ли заведение
 
     public Lunchroom(String name, int numberOfWaiters) {
         this.name = name;
@@ -24,11 +22,6 @@ public class Lunchroom {
         IntStream.range(0, numberOfWaiters).forEach(i -> waiters.add(new Waiter(this)));
         welcome();
     }
-
-
-    // обеспечить работой потоки, координировать их
-    // считать заказавших посетителей; когда наберётся план, перестать принимать новых
-    // когда уйдёт последний посетитель, закрыть заведение
 
     public boolean isOpenForEntrance() {
         return customersCome < SALES_PLAN;
@@ -59,5 +52,6 @@ public class Lunchroom {
 
     public void farewell() {
         System.out.printf("\"%s\" обслужил %d посетителей и на сегодня закрывается!%n", name, SALES_PLAN);
+
     }
 }
