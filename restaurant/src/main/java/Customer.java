@@ -17,27 +17,27 @@ public class Customer implements Runnable {
     public void run() {
         if (!lunchroom.isOpenForEntrance()) return;
         lunchroom.haveCustomerCome(this);
-        Main.timePass(MEAN_CHOOSING_TIME);
         makeAnOrder(lunchroom);
         consume();
         lunchroom.haveCustomerServed(this);
-//        Thread.currentThread().interrupt();
     }
 
     private void makeAnOrder(Lunchroom lunchroom) {
-        Waiter servant = null;
-        while (servant == null) {
+        Main.timePass(MEAN_CHOOSING_TIME);
+        Waiter servant;
+        calling:
+        while (true) {
             System.out.println(this + " зовёт официанта");
             for (Waiter w : lunchroom.waiters)
-                if (w.isFree())
+                if (w.serving.tryLock()) {
                     servant = w;
+                    break calling;
+                }
             Main.timePass(CALLING_TIME);
         }
         try {
-            servant.serving.lock();
             servant.takeClient(this);
             servant.orderToServe.signal();
-//            servant.serveTheCustomer(this);
             servant.dishReady.await();
         }
         catch (InterruptedException e) { e.printStackTrace(); }

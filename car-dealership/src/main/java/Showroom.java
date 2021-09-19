@@ -17,7 +17,6 @@ public class Showroom {
     private int carsSold;
 
     public void sellACar(Customer buyer) {
-//        if (planFulfilled()) return;
         try {
             sync.lockInterruptibly();
             while (stock.isEmpty()) {

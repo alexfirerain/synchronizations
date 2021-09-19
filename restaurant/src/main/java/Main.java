@@ -17,17 +17,8 @@ public class Main {
             }
         }
 
-//        for (Runnable r : persons.shutdownNow())
-//            System.out.println(r.toString());
-//        Thread.currentThread().interrupt();
-//        try {
-//            persons.awaitTermination(5, TimeUnit.SECONDS);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
+        persons.shutdownNow();
     }
-
 
     public static void timePass(int avg) {
         try {

@@ -11,16 +11,11 @@ public class Waiter implements Runnable {
     private final int id;                        // номер официанта в организации
 
     private Customer client;                     // обслуживаемый посетитель
-    private volatile boolean isFree = true;      // флажок доступности официанта
+    private int served;
 
     Lock serving = new ReentrantLock();
     Condition orderToServe = serving.newCondition();
     Condition dishReady = serving.newCondition();
-
-    public Waiter(Lunchroom company) {
-        this.company = company;
-        id = ++N;
-    }
 
     @Override
     public void run() {
@@ -31,14 +26,15 @@ public class Waiter implements Runnable {
                 orderToServe.await();
                 serveTheCustomer(client);
                 dishReady.signal();
+                served++;
             }
-            catch (InterruptedException e) { e.printStackTrace(); }
+            catch (InterruptedException ignored) {}
             finally { serving.unlock(); }
         }
+        System.out.println(this + " обслужил сегодня " + served + " посетителей и идёт домой");
     }
 
     public void serveTheCustomer(Customer client) throws InterruptedException {
-        isFree = false;
         System.out.println(this + " принял заказ от " + client);
         try {
             company.cook.cooking.lock();
@@ -46,20 +42,20 @@ public class Waiter implements Runnable {
             System.out.println(this + " несёт заказ для " + client);
         } finally {
             company.cook.cooking.unlock();
-            isFree = true;
         }
     }
 
-    public boolean isFree() {
-        return isFree;
+    public void takeClient(Customer client) {
+        this.client = client;
+    }
+
+    public Waiter(Lunchroom company) {
+        this.company = company;
+        id = ++N;
     }
 
     @Override
     public String toString() {
         return "Официант " + id;
-    }
-
-    public void takeClient(Customer client) {
-        this.client = client;
     }
 }
