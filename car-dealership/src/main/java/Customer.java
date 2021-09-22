@@ -1,7 +1,8 @@
 import static java.lang.Thread.interrupted;
 
 public class Customer implements Runnable {
-    private final int AVRG_EXPLUATATION_PERIOD = 7000;
+    private static final int AVG_EXPLOITATION_PERIOD = 7000;
+
     private final String name;
     private final Showroom shop;
 
@@ -10,7 +11,8 @@ public class Customer implements Runnable {
         this.shop = shop;
     }
 
-    public String getName() {
+    @Override
+    public String toString() {
         return name;
     }
 
@@ -18,14 +20,16 @@ public class Customer implements Runnable {
     public void run() {
         System.out.println(name + " пришёл в салон купить машину.");
         while (!interrupted()) {
-            shop.sellACar(this);
             try {
-                Main.randomDelay(AVRG_EXPLUATATION_PERIOD);
+                shop.sellACar(this);
+                Main.randomDelay( AVG_EXPLOITATION_PERIOD );
+                System.out.println(name + " накатался на старой машине и пришёл в салон за новой.");
+            } catch (StoreClosingException e) {
+                System.out.println(e.getMessage());
+                return;
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
                 return;
             }
-            System.out.println(name + " накатался на старой машине и пришёл в салон за новой.");
         }
     }
 }

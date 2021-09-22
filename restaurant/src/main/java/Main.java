@@ -1,6 +1,5 @@
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
     static ExecutorService persons = Executors.newCachedThreadPool();
@@ -16,7 +15,6 @@ public class Main {
                 persons.execute(new Customer(restaurant));
             }
         }
-
         persons.shutdownNow();
     }
 

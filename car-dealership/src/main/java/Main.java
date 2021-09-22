@@ -22,6 +22,7 @@ public class Main {
             return new Customer(x, showroom);
         }).forEach(actors::execute);
 
+        // или так, не могу решить, что красивее
 //        for (String name : customers) {
 //            actors.execute(new Customer(name, showroom));
 //            try { randomDelay(CUSTOMERS_ENTRANCE_DELAY); }
@@ -33,8 +34,8 @@ public class Main {
             try { Thread.sleep(PLAN_CHECK_PERIOD); }
             catch (InterruptedException e) { e.printStackTrace(); }
         }
-        actors.shutdownNow();
         System.out.println("План продажи " + Showroom.SALES_PLAN + " машин выполнен. Всем спасибо, все свободны!");
+        actors.shutdownNow();
     }
 
     public static void randomDelay(int avg) throws InterruptedException {

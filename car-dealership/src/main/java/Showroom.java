@@ -16,21 +16,18 @@ public class Showroom {
 
     private int carsSold;
 
-    public void sellACar(Customer buyer) {
+    public void sellACar(Customer buyer) throws StoreClosingException {
         try {
-            sync.lockInterruptibly();
+            sync.lock();
             while (stock.isEmpty()) {
-                System.out.println("Нет машин в наличии! " + buyer.getName() + " потусуется немного в холле.\n");
+                System.out.println("Нет машин в наличии! " + buyer + " потусуется немного в холле.\n");
                 carReceived.await();
             }
-
             Car sold = stock.remove();
             carsSold++;
-            System.out.println(buyer.getName() + " приобрёл машину " + sold + " и поехал кататься.\n");
-
-        } catch (InterruptedException | NoSuchElementException e) {
-            System.out.println("Салон закрылся. " + buyer.getName() + " не дождался и придёт завтра.");
-            System.out.printf("(%s)%n", e.getMessage());
+            System.out.println(buyer + " приобрёл машину " + sold + " и поехал кататься.\n");
+        } catch (NoSuchElementException | InterruptedException e) {
+            throw new StoreClosingException("Салон закрылся. " + buyer + " наверное придёт завтра.");
         } finally {
             sync.unlock();
         }

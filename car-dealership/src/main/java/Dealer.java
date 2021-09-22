@@ -1,3 +1,5 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.Random;
 
 import static java.lang.Thread.interrupted;
@@ -19,8 +21,7 @@ public class Dealer implements Runnable {
                 Thread.sleep(RELEASE_PERIOD);
                 provideACar(partner);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
+                return;
             }
         }
     }
